@@ -8,7 +8,7 @@ class DimOrder(object):
 	HeightWidthChannel = ['h', 'w', 'c']
 
 
-class SlidingWindow(object):
+class panjareh(object):
 	"""
 	Represents a single window into a larger dataset.
 	"""
