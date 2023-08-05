@@ -37,7 +37,7 @@ import numpy as np
 # data = load(...)
 
 # Generate the set of windows, with a 256-pixel max window size and 50% overlap
-windows = sw.generate(data, sw.DimOrder.HeightWidthChannel, 256, 0.5)
+windows = pj.generate(data, sw.DimOrder.HeightWidthChannel, 256, 0.5)
 
 # Do stuff with the generated windows
 for window in windows:
@@ -60,7 +60,7 @@ for window in windows:
 windows = pj.generate(data, sw.DimOrder.HeightWidthChannel, 256, 0.5)
 for window in windows:
 	rect = window.getRect()
-	transformed = sw.padRectEqually(rect, 100, data.shape)
+	transformed = pj.padRectEqually(rect, 100, data.shape)
 	window.setRect(transformed)
 	# ...
 
