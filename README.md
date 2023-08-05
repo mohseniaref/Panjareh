@@ -20,14 +20,10 @@ Installation
 To install with pip, run:
 
 ```
-pip install slidingwindow
+pip install panjareh
 ```
 
-To install with conda, run:
 
-```
-conda install slidingwindow
-```
 
 
 Usage Example
