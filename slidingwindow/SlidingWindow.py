@@ -97,54 +97,58 @@ def generate(data, dimOrder, maxWindowSize, overlapPercent, transforms=[], overr
 	return generateForSize(width, height, dimOrder, maxWindowSize, overlapPercent, transforms, overrideWidth, overrideHeight)
 
 
-def generateForSize(width, height, dimOrder, maxWindowSize, overlapPercent, transforms=[], overrideWidth=None, overrideHeight=None):
-	"""
-	Generates a set of sliding windows for a dataset with the specified dimensions and order.
-	"""
-	
-	# Create square windows unless an explicit width or height has been specified
-	windowSizeX = maxWindowSize if overrideWidth is None else overrideWidth
-	windowSizeY = maxWindowSize if overrideHeight is None else overrideHeight
-	
-	# If the input data is smaller than the specified window size,
-	# clip the window size to the input size on both dimensions
-	windowSizeX = min(windowSizeX, width)
-	windowSizeY = min(windowSizeY, height)
-	
-	# Compute the window overlap and step size
-	windowOverlapX = int(math.floor(windowSizeX * overlapPercent))
-	windowOverlapY = int(math.floor(windowSizeY * overlapPercent))
-	stepSizeX = windowSizeX - windowOverlapX
-	stepSizeY = windowSizeY - windowOverlapY
-	
-	# Determine how many windows we will need in order to cover the input data
-	lastX = width - windowSizeX
-	lastY = height - windowSizeY
-	xOffsets = list(range(0, lastX+1, stepSizeX))
-	yOffsets = list(range(0, lastY+1, stepSizeY))
-	
-	# Unless the input data dimensions are exact multiples of the step size,
-	# we will need one additional row and column of windows to get 100% coverage
-	if len(xOffsets) == 0 or xOffsets[-1] != lastX:
-		xOffsets.append(lastX)
-	if len(yOffsets) == 0 or yOffsets[-1] != lastY:
-		yOffsets.append(lastY)
-	
-	# Generate the list of windows
-	windows = []
-	for xOffset in xOffsets:
-		for yOffset in yOffsets:
-			for transform in [None] + transforms:
-				windows.append(SlidingWindow(
-					x=xOffset,
-					y=yOffset,
-					w=windowSizeX,
-					h=windowSizeY,
-					dimOrder=dimOrder,
-					transform=transform
-				))
-	
-	return windows
+def generateForSize(width, height, dimOrder, maxWindowSize, overlapPercent=None, windowOverlapX=None, windowOverlapY=None, transforms=[], overrideWidth=None, overrideHeight=None):
+    """
+    Generates a set of sliding windows for a dataset with the specified dimensions and order.
+    """
+    
+    # Create square windows unless an explicit width or height has been specified
+    windowSizeX = maxWindowSize if overrideWidth is None else overrideWidth
+    windowSizeY = maxWindowSize if overrideHeight is None else overrideHeight
+    
+    # If the input data is smaller than the specified window size,
+    # clip the window size to the input size on both dimensions
+    windowSizeX = min(windowSizeX, width)
+    windowSizeY = min(windowSizeY, height)
+    
+    # Compute the window overlap and step size
+    if windowOverlapX is not None and windowOverlapY is not None:
+        stepSizeX = windowSizeX - windowOverlapX
+        stepSizeY = windowSizeY - windowOverlapY
+    else:
+        if overlapPercent is None:
+            overlapPercent = 0.5  # Default overlap percentage, you can adjust this value as needed.
+        stepSizeX = windowSizeX - int(math.floor(windowSizeX * overlapPercent))
+        stepSizeY = windowSizeY - int(math.floor(windowSizeY * overlapPercent))
+    
+    # Determine how many windows we will need in order to cover the input data
+    lastX = width - windowSizeX
+    lastY = height - windowSizeY
+    xOffsets = list(range(0, lastX + 1, stepSizeX))
+    yOffsets = list(range(0, lastY + 1, stepSizeY))
+    
+    # Unless the input data dimensions are exact multiples of the step size,
+    # we will need one additional row and column of windows to get 100% coverage
+    if len(xOffsets) == 0 or xOffsets[-1] != lastX:
+        xOffsets.append(lastX)
+    if len(yOffsets) == 0 or yOffsets[-1] != lastY:
+        yOffsets.append(lastY)
+    
+    # Generate the list of windows
+    windows = []
+    for xOffset in xOffsets:
+        for yOffset in yOffsets:
+            for transform in [None] + transforms:
+                windows.append(SlidingWindow(
+                    x=xOffset,
+                    y=yOffset,
+                    w=windowSizeX,
+                    h=windowSizeY,
+                    dimOrder=dimOrder,
+                    transform=transform
+                ))
+    
+    return windows
 
 
 def generateRectanglarWindows(data, dimOrder, windowShape, overlapPercent, transforms=[]):
