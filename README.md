@@ -30,7 +30,7 @@ Usage Example
 -------------
 
 ```python
-import slidingwindow as sw
+import panjareh as pj
 import numpy as np
 
 # Load our input image here
@@ -57,7 +57,7 @@ for window in windows:
 	# ...
 
 # Alternatively, if we want to modify each window
-windows = sw.generate(data, sw.DimOrder.HeightWidthChannel, 256, 0.5)
+windows = pj.generate(data, sw.DimOrder.HeightWidthChannel, 256, 0.5)
 for window in windows:
 	rect = window.getRect()
 	transformed = sw.padRectEqually(rect, 100, data.shape)
