@@ -84,35 +84,7 @@ class panjareh(object):
 		return self.__str__()
 
 
-def generate(data, dimOrder, maxWindowSize, overlapPercent, transforms=[], overrideWidth=None, overrideHeight=None):
-	"""
-	Generates a set of sliding windows for the specified dataset.
-	"""
-	
-	# Determine the dimensions of the input data
-	width = data.shape[dimOrder.index('w')]
-	height = data.shape[dimOrder.index('h')]
-	
-	# Generate the windows
-	return generateForSize(width, height, dimOrder, maxWindowSize, overlapPercent, transforms, overrideWidth, overrideHeight)
-
-
-def generateForSize(width, height, dimOrder, maxWindowSize, overlapPercent=None, windowOverlapX=None, windowOverlapY=None, transforms=[], overrideWidth=None, overrideHeight=None):
-    """
-    Generates a set of sliding windows for a dataset with the specified dimensions and order.
-    """
-    
-    # Create square windows unless an explicit width or height has been specified
-    windowSizeX = maxWindowSize if overrideWidth is None else overrideWidth
-    windowSizeY = maxWindowSize if overrideHeight is None else overrideHeight
-    
-    # If the input data is smaller than the specified window size,
-    # clip the window size to the input size on both dimensions
-    windowSizeX = min(windowSizeX, width)
-    windowSizeY = min(windowSizeY, height)
-    
-    # Compute the window overlap and step size
-    if windowOverlapX is not None and windowOverlapY is not None:
+   if windowOverlapX is not None and windowOverlapY is not None:
         stepSizeX = windowSizeX - windowOverlapX
         stepSizeY = windowSizeY - windowOverlapY
     else:
