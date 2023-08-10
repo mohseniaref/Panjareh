@@ -1,4 +1,4 @@
-from .SlidingWindow import DimOrder, SlidingWindow, generate, generateForSize
+from .panjareh import DimOrder, panjareh, generate, generateForSize
 from .WindowDistance import generateDistanceMatrix
 from .RectangleUtils import *
 from .ArrayUtils import *
